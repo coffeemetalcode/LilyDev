@@ -36,7 +36,6 @@ RUN apt-get update && apt-get --no-install-recommends install -y \
     libharfbuzz-dev \
     libcairo2-dev \
     libglib2.0-dev \
-    libgobject-2.0-dev \
     \
     # Graphics and image processing
     libpng-dev \
@@ -51,7 +50,7 @@ RUN apt-get update && apt-get --no-install-recommends install -y \
     \
     # Font utilities
     fontforge \
-    fontforge-python \
+    python3-fontforge \
     t1utils \
     \
     # TeX Live for documentation
@@ -105,21 +104,16 @@ RUN apt-get update && apt-get --no-install-recommends install -y \
 RUN git config --system --add safe.directory '*'
 
 # Create a non-root user for development
-ARG USERNAME=dev
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-
-RUN groupadd --gid $USER_GID $USERNAME \
-    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+RUN useradd -m -s /bin/bash dev \
     && apt-get update \
     && apt-get install --no-install-recommends -y sudo \
-    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME \
+    && echo dev ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/dev \
+    && chmod 0440 /etc/sudoers.d/dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up the development environment
-USER $USERNAME
-WORKDIR /home/$USERNAME
+USER dev
+WORKDIR /home/dev
 
 # Add useful aliases and environment variables
 RUN echo 'export PS1="\[\033[01;32m\]lilypond-dev@\h:\w\$\[\033[00m\] "' >> ~/.bashrc \

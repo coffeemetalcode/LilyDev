@@ -17,22 +17,22 @@ This Dockerfile creates a complete development environment for LilyPond based on
 
 1. **Build the image:**
    ```bash
-   docker-compose build
+   docker compose build
    ```
 
 2. **Start development shell:**
    ```bash
-   docker-compose run lilypond-dev
+   docker compose run lilypond-dev
    ```
 
 3. **Build LilyPond:**
    ```bash
-   docker-compose run lilypond-build
+   docker compose run lilypond-build
    ```
 
 4. **Run tests:**
    ```bash
-   docker-compose run lilypond-test
+   docker compose run lilypond-test
    ```
 
 ### Using Docker Directly
@@ -83,12 +83,12 @@ export USER_UID=$(id -u)
 export USER_GID=$(id -g)
 export USERNAME=$(whoami)
 
-docker-compose build
+docker compose build
 ```
 
 ### Volume Mounts
 
-The docker-compose.yml includes these volume mounts:
+The docker compose.yml includes these volume mounts:
 - `.` → `/workspace` (your LilyPond source code)
 - `~/.gitconfig` → `/home/dev/.gitconfig` (your Git configuration)
 
@@ -127,7 +127,7 @@ volumes:
 
 ## Development Workflow
 
-1. **Start container:** `docker-compose run lilypond-dev`
+1. **Start container:** `docker compose run lilypond-dev`
 2. **Make changes:** Edit files in your host workspace
 3. **Build:** `make -j$(nproc)` inside container
 4. **Test:** `make check` inside container
@@ -138,7 +138,7 @@ volumes:
 - Use `make -j$(nproc)` to utilize all CPU cores
 - Mount source code as a volume for instant file sync
 - Use Docker's build cache for faster rebuilds
-- Consider using `docker-compose up -d` for background development
+- Consider using `docker compose up -d` for background development
 
 ## Troubleshooting
 
@@ -147,7 +147,7 @@ If you encounter permission problems, rebuild with your user ID:
 ```bash
 export USER_UID=$(id -u)
 export USER_GID=$(id -g)
-docker-compose build --no-cache
+docker compose build --no-cache
 ```
 
 ### Missing Dependencies
