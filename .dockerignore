@@ -1,0 +1,95 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation (large directories)
+Documentation/
+*.html
+*.pdf
+*.ps
+
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.dll
+*.lib
+*.obj
+*.pdb
+*.ilk
+*.exp
+
+# Generated files
+configure
+config.hh
+config.log
+config.status
+Makefile
+GNUmakefile
+stamp-h1
+
+# LilyPond output
+*.lyi
+*.midi
+*.mid
+*.pdf
+*.png
+*.ps
+*.svg
+*.wav
+
+# Temporary files
+*~
+*.tmp
+*.bak
+*.swp
+.swo
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Logs
+*.log
+
+# Test outputs
+test-output/
+tests/output/
+
+# Cache directories
+.cache/
+.pytest_cache/
+
+# Large binary files that shouldn't be in container
+*.tar.gz
+*.tar.bz2
+*.zip
+*.7z
+*.rar
+
+# Node modules (if any)
+node_modules/
+
+# Docker files (except the main Dockerfile)
+docker-compose.override.yml
+.dockerignore
+
+# Local development files
+.env.local
+.env.*.local
