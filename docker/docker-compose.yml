@@ -1,4 +1,4 @@
-version: '3.8'
+# version: "3.8"
 
 services:
   lilypond-dev:
@@ -7,9 +7,10 @@ services:
       dockerfile: Dockerfile
     image: lilypond-dev:24.04
     container_name: lilypond-dev-container
-    working_dir: /workspace
+    working_dir: /home/dev/lilypond
     volumes:
-      - ${LILYPOND_SOURCE_PATH}:/workspace
+      - ${LILYPOND_SOURCE_PATH}:/home/dev/lilypond
+      - ${LILYPOND_SCORES_PATH}:/home/dev/scores
       - ~/.gitconfig:/home/dev/.gitconfig:ro
     environment:
       - LANG=en_US.UTF-8

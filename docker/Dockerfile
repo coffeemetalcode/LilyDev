@@ -125,6 +125,6 @@ RUN echo 'export PS1="\[\033[01;32m\]lilypond-dev@\h:\w\$\[\033[00m\] "' >> ~/.b
 CMD ["/bin/bash"]
 
 # Labels for metadata
-LABEL maintainer="LilyPond Developer" \
+LABEL maintainer="coffee | metal | code" \
       description="Ubuntu 24.04 LTS container with LilyPond build dependencies" \
       version="24.04"

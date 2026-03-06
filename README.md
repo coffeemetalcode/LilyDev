@@ -203,3 +203,8 @@ This Dockerfile is based on `docker/base/Dockerfile.ubuntu-22.04` but includes:
 - More comprehensive font collection
 - Development user configuration
 - Optimized layer caching
+
+## TODO: Setup Persistent Installations
+- Document installing lilypond to a subdir of the source directory
+- .gitignore this in the forked source repository
+- alias `lilypond` to the path of the installed executable in the base Dockerfile
