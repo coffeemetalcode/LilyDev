@@ -9,7 +9,7 @@ services:
     container_name: lilypond-dev-container
     working_dir: /workspace
     volumes:
-      - .:/workspace
+      - ${LILYPOND_SOURCE_PATH}:/workspace
       - ~/.gitconfig:/home/dev/.gitconfig:ro
     environment:
       - LANG=en_US.UTF-8

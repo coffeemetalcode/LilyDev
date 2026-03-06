@@ -13,7 +13,37 @@ This Dockerfile creates a complete development environment for LilyPond based on
 
 ## Quick Start
 
-### Using Docker Compose (Recommended)
+### 1. Configure Your LilyPond Source Path
+
+Copy the example environment file and configure your LilyPond source directory:
+
+```bash
+# Navigate to the docker directory
+cd docker
+
+# Copy the template
+cp .env.example .env
+
+# Edit the .env file to point to your LilyPond repository
+nano .env
+```
+
+In the `docker/.env` file, set `LILYPOND_SOURCE_PATH` to the absolute path of your LilyPond source repository:
+
+```bash
+# Example configurations:
+LILYPOND_SOURCE_PATH=/home/user/projects/lilypond
+# LILYPOND_SOURCE_PATH=/Users/username/git/lilypond
+# LILYPOND_SOURCE_PATH=C:\Users\username\git\lilypond
+```
+
+### 2. Build and Run
+
+Navigate to the `docker/` directory first:
+
+```bash
+cd docker
+```
 
 1. **Build the image:**
    ```bash
@@ -35,17 +65,19 @@ This Dockerfile creates a complete development environment for LilyPond based on
    docker compose run lilypond-test
    ```
 
+**Note**: All docker compose commands must be run from the `docker/` directory where `docker-compose.yml` and `.env` are located.
+
 ### Using Docker Directly
 
 1. **Build the image:**
    ```bash
-   docker build -t lilypond-dev:24.04 .
+   docker build -t lilypond-dev:24.04 docker/
    ```
 
 2. **Run the container:**
    ```bash
    docker run -it --rm \
-     -v $(pwd):/workspace \
+     -v /path/to/your/lilypond:/workspace \
      -w /workspace \
      lilypond-dev:24.04
    ```
@@ -89,13 +121,15 @@ docker compose build
 ### Volume Mounts
 
 The docker compose.yml includes these volume mounts:
-- `.` → `/workspace` (your LilyPond source code)
-- `~/.gitconfig` → `/home/dev/.gitconfig` (your Git configuration)
+- `${LILYPOND_SOURCE_PATH}` → `/workspace` (your LilyPond source code - configured in `.env`)
+- `~/.gitconfig` → `/home/dev/.gitconfig` (your Git configuration, read-only)
+
+The `LILYPOND_SOURCE_PATH` environment variable is defined in the `docker/.env` file, allowing each developer to point to their own LilyPond repository location.
 
 Add more volumes as needed:
 ```yaml
 volumes:
-  - .:/workspace
+  - ${LILYPOND_SOURCE_PATH}:/workspace
   - ~/.gitconfig:/home/dev/.gitconfig:ro
   - ~/.ssh:/home/dev/.ssh:ro  # SSH keys for Git operations
   - /path/to/local/fonts:/usr/share/fonts/truetype/custom  # Custom fonts
@@ -127,11 +161,12 @@ volumes:
 
 ## Development Workflow
 
-1. **Start container:** `docker compose run lilypond-dev`
-2. **Make changes:** Edit files in your host workspace
-3. **Build:** `make -j$(nproc)` inside container
-4. **Test:** `make check` inside container
-5. **Exit:** Type `exit` or press Ctrl+D
+1. **Navigate to docker directory:** `cd docker`
+2. **Start container:** `docker compose run lilypond-dev`
+3. **Make changes:** Edit files in your host workspace (configured in `docker/.env`)
+4. **Build:** `make -j$(nproc)` inside container
+5. **Test:** `make check` inside container
+6. **Exit:** Type `exit` or press Ctrl+D
 
 ## Performance Tips
 
