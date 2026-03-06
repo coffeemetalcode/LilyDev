@@ -111,6 +111,11 @@ RUN useradd -m -s /bin/bash dev \
     && chmod 0440 /etc/sudoers.d/dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Set environment variables for LilyPond executable
+# This will only work after LilyPond is built and installed in
+# /home/dev/lilypond/install for the first time
+ENV PATH="/home/dev/lilypond/install/bin:${PATH}"
+
 # Set up the development environment
 USER dev
 WORKDIR /home/dev

@@ -38,6 +38,7 @@ LILYPOND_SOURCE_PATH=/home/user/projects/lilypond
 ```
 
 ### 2. Build and Run
+(For persisting a build and installation across development sessions in the Docker container, see *Install to Source Directory (Recommended)* below)
 
 Navigate to the `docker/` directory first:
 
@@ -105,6 +106,7 @@ sudo make install
 
 ## Customization
 
+<!-- TODO: this might not work, and even if it did, it might be bad advice -->
 ### User Configuration
 
 You can customize the development user by setting environment variables:
@@ -159,6 +161,33 @@ volumes:
 - Liberation, Noto (including CJK and emoji)
 - Latin Modern
 
+## Persistent Installation Solution
+
+### Install to Source Directory (Recommended)
+
+Install LilyPond to `/home/dev/lilypond/install`. The result is a fresh installation on your host machine in `$LILYPOND_SOURCE_PATH/install/`. A persistent `$PATH` variable is set up in the Dockerfile to point to this command, and it should work after the first time you build and install from inside the running Docker image.
+
+```bash
+# Configure with custom install prefix
+./configure --prefix=/home/dev/lilypond/install --enable-checking --enable-documentation
+
+# Build and install
+make -j$(nproc)
+make install
+```
+
+**Benefits:**
+- Installation persists across container restarts
+- No additional volume mounts needed
+- Keeps build artifacts with source code
+- Separate from LilyPond installations on your host machine
+  - You could alias a command like `lilypond-dev` to `$LILYPOND_SOURCE_PATH/lilypond/install/bin/lilypond` if you want to invoke it from your host machine without running the Docker container
+
+**Usage:**
+- `lilypond` command available automatically (PATH set in Dockerfile)
+- Installation located at: `/home/dev/lilypond/install/`
+- Use full path if needed: `/home/dev/lilypond/install/bin/lilypond`
+
 ## Development Workflow
 
 1. **Navigate to docker directory:** `cd docker`
@@ -203,8 +232,3 @@ This Dockerfile is based on `docker/base/Dockerfile.ubuntu-22.04` but includes:
 - More comprehensive font collection
 - Development user configuration
 - Optimized layer caching
-
-## TODO: Setup Persistent Installations
-- Document installing lilypond to a subdir of the source directory
-- .gitignore this in the forked source repository
-- alias `lilypond` to the path of the installed executable in the base Dockerfile
