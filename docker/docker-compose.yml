@@ -1,0 +1,44 @@
+# version: "3.8"
+
+services:
+  lilypond-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lilypond-dev:24.04
+    container_name: lilypond-dev-container
+    working_dir: /home/dev/lilypond
+    volumes:
+      - ${LILYPOND_SOURCE_PATH}:/home/dev/lilypond
+      - ${LILYPOND_SCORES_PATH}:/home/dev/scores
+      - ~/.gitconfig:/home/dev/.gitconfig:ro
+    environment:
+      - LANG=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+  lilypond-build:
+    extends: lilypond-dev
+    command: |
+      bash -c "
+        if [ ! -f ./configure ]; then
+          ./autogen.sh
+        fi
+        if [ ! -f ./Makefile ]; then
+          ./configure --enable-checking --enable-documentation
+        fi
+        make -j$(nproc)
+      "
+
+  lilypond-test:
+    extends: lilypond-dev
+    command: |
+      bash -c "
+        if [ ! -f ./Makefile ]; then
+          echo 'LilyPond not built yet. Run: docker-compose run lilypond-build'
+          exit 1
+        fi
+        make check
+      "

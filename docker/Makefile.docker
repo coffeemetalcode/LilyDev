@@ -1,0 +1,52 @@
+# LilyPond Docker Development Makefile
+# Provides convenient targets for Docker-based development
+
+.PHONY: help build shell make test clean rebuild
+
+# Default target
+help:
+	@echo "LilyPond Docker Development"
+	@echo ""
+	@echo "Available targets:"
+	@echo "  build    - Build the Docker image"
+	@echo "  shell    - Start development shell"
+	@echo "  make     - Build LilyPond inside container"
+	@echo "  test     - Run tests"
+	@echo "  clean    - Clean up Docker resources"
+	@echo "  rebuild  - Rebuild the Docker image from scratch"
+	@echo "  help     - Show this help message"
+
+# Build the Docker image
+build:
+	@echo "Building LilyPond development Docker image..."
+	docker-compose build
+
+# Start development shell
+shell:
+	@echo "Starting LilyPond development shell..."
+	docker-compose run --rm lilypond-dev
+
+# Build LilyPond
+make:
+	@echo "Building LilyPond..."
+	docker-compose run --rm lilypond-build
+
+# Run tests
+test:
+	@echo "Running LilyPond tests..."
+	docker-compose run --rm lilypond-test
+
+# Clean up Docker resources
+clean:
+	@echo "Cleaning up Docker resources..."
+	docker-compose down --rmi all --volumes --remove-orphans 2>/dev/null || true
+	docker system prune -f
+
+# Rebuild from scratch
+rebuild: clean build
+
+# Quick development cycle (build + shell)
+dev: build shell
+
+# Full development cycle (build + make + test)
+full: build make test
