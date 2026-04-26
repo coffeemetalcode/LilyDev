@@ -122,7 +122,7 @@ docker compose build
 
 ### Volume Mounts
 
-The docker compose.yml includes these volume mounts:
+The docker-compose.yml includes these volume mounts:
 - `${LILYPOND_SOURCE_PATH}` → `/workspace` (your LilyPond source code - configured in `.env`)
 - `~/.gitconfig` → `/home/dev/.gitconfig` (your Git configuration, read-only)
 
